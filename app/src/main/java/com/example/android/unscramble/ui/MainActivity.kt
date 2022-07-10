@@ -25,9 +25,8 @@ import com.example.android.unscramble.R
 import com.example.android.unscramble.data.source.WordSourceImpl
 import com.example.android.unscramble.domain.use_case.NextWordUseCase
 import com.example.android.unscramble.domain.use_case.ScrambleWordUseCase
-import com.example.android.unscramble.domain.use_case.xml_parser.GoToNextTagUseCase
-import com.example.android.unscramble.domain.use_case.xml_parser.ParseNextWordXmlUseCase
-import com.example.android.unscramble.domain.use_case.xml_parser.ParseWordXmlUseCase
+import com.example.android.unscramble.domain.use_case.xml_parser.ParseAllElements
+import com.example.android.unscramble.domain.use_case.xml_parser.ParseXmlUseCase
 import com.example.android.unscramble.ui.game.WordListRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,10 +35,9 @@ import kotlin.random.Random
 
 object ResourceProvider {
 
-    private val nextTagUseCase = GoToNextTagUseCase()
-    private val parseNextWordXmlUseCase = ParseNextWordXmlUseCase(nextTagUseCase)
-    private val parseWordXmlUseCase = ParseWordXmlUseCase(parseNextWordXmlUseCase, nextTagUseCase)
-    val wordSource = WordSourceImpl(parseWordXmlUseCase, Random(System.currentTimeMillis()))
+    private val parseAllElements = ParseAllElements()
+    private val parseXmlUseCase = ParseXmlUseCase(parseAllElements)
+    val wordSource = WordSourceImpl(parseXmlUseCase, Random(System.currentTimeMillis()))
     private val wordListRepository = WordListRepositoryImpl(wordSource)
     val nextWordUseCase = NextWordUseCase(wordListRepository)
     val scrambleWordUseCase = ScrambleWordUseCase()
