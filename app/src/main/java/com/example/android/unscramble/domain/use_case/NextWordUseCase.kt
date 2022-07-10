@@ -7,11 +7,11 @@ class NextWordUseCase(private val wordRepository: WordListRepository) {
 
     private val usedWords = mutableListOf<Int>()
 
-    suspend operator fun invoke(): Word { // TODO return a flow
-        //if(usedWords.size == wordRepository.getRepoSize()) {
-        //    assert(false) { "we have exhausted all unique words" }
-        //    usedWords.clear() // avoid infinite loop by allowing the words to repeat
-        //}
+    suspend operator fun invoke(): Word {
+        if(usedWords.size != 0 && usedWords.size == wordRepository.getRepoSize()) {
+            assert(false) { "we have exhausted all unique words" }
+            usedWords.clear() // avoid infinite loop by allowing the words to repeat
+        }
         var word = wordRepository.getRandomWord()
         while(usedWords.contains(word.id)) {
             word = wordRepository.getRandomWord()

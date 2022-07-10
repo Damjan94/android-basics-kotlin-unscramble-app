@@ -1,12 +1,12 @@
 package com.example.android.unscramble.ui.game
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.android.unscramble.data.model.Word
 import com.example.android.unscramble.domain.use_case.NextWordUseCase
 import com.example.android.unscramble.domain.use_case.ScrambleWordUseCase
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
 class GameViewModel(
@@ -17,8 +17,10 @@ class GameViewModel(
         private set
     var currentWordCount = 0
         private set
-    val currentScrambledWordChannel = Channel<String>(Channel.CONFLATED)
 
+
+    var currentScrambledWord = MutableLiveData<String>()
+        private set
     lateinit var currentWord: Word
         private set
     var guessFailed = false
@@ -40,7 +42,7 @@ class GameViewModel(
     private fun updateWords() {
         viewModelScope.launch {
             currentWord = nextWordUseCase()
-            currentScrambledWordChannel.send(scrambleWordUseCase(currentWord.word))
+            currentScrambledWord.value = scrambleWordUseCase(currentWord.word)
         }
     }
     fun restartGame() {

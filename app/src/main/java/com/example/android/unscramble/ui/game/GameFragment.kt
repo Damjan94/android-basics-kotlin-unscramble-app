@@ -26,14 +26,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewModelScope
 import com.example.android.unscramble.R
 import com.example.android.unscramble.databinding.GameFragmentBinding
 import com.example.android.unscramble.ui.ResourceProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.launch
 
 /**
  * Fragment where the game is played, contains the game logic.
@@ -71,6 +67,9 @@ class GameFragment : Fragment() {
         binding.textViewUnscrambledWord.setOnClickListener { onShowWordInfo() }
         // Update the UI
         updateWordOnScreen()
+        gameViewModel.currentScrambledWord.observe(viewLifecycleOwner) {
+            binding.textViewUnscrambledWord.text = it
+        }
     }
 
     /*
@@ -146,12 +145,6 @@ class GameFragment : Fragment() {
     private fun updateWordOnScreen() {
         binding.wordCount.text = getString(R.string.word_count, gameViewModel.currentWordCount, MAX_NO_OF_WORDS)
         binding.score.text = getString(R.string.score, gameViewModel.score)
-        gameViewModel.viewModelScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val scrambledWord = gameViewModel.currentScrambledWordChannel.receive()
-                binding.textViewUnscrambledWord.text = scrambledWord
-            }
-        }
     }
 
     private fun showEndGameDialog() {
