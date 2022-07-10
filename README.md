@@ -10,6 +10,14 @@ Used in the [Android Basics with Kotlin](https://developer.android
 .com/courses/android-basics-kotlin/course) course.
 
 
+What changed
+------------
+
+I followed the tutorial, and wasn't satisfied with the result, so I:
+- Cleaned the code up by using separation of concerns
+- Changed the app to use Serbian dictionary provided by [Jezicka Laboratorija](http://lab.unilib.rs/)
+- Added the option to go to the word's wiki page(if one exists) by clicking on the scrambled word
+
 Pre-requisites
 --------------
 
