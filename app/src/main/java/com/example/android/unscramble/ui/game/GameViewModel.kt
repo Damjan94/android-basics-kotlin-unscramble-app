@@ -59,7 +59,6 @@ class GameViewModel(
         return currentWordCount >= MAX_NO_OF_WORDS
     }
 
-
     class Factory(
             private val nextWordUseCase: NextWordUseCase,
             private val scrambleWordUseCase: ScrambleWordUseCase

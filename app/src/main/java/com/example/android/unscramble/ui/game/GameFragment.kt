@@ -16,6 +16,9 @@
 
 package com.example.android.unscramble.ui.game
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -65,6 +68,7 @@ class GameFragment : Fragment() {
         // Setup a click listener for the Submit and Skip buttons.
         binding.submit.setOnClickListener { onSubmitWord() }
         binding.skip.setOnClickListener { onSkipWord() }
+        binding.textViewUnscrambledWord.setOnClickListener { onShowWordInfo() }
         // Update the UI
         updateWordOnScreen()
     }
@@ -87,6 +91,16 @@ class GameFragment : Fragment() {
         Toast.makeText(requireContext(), getString(R.string.the_word_was, gameViewModel.currentWord.word), Toast.LENGTH_LONG).show()
         gameViewModel.skipWord()
         afterUserAnswerSubmit()
+    }
+
+    private fun onShowWordInfo() {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(gameViewModel.currentWord.url)
+            startActivity(intent)
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(requireContext(), gameViewModel.currentWord.description, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun afterUserAnswerSubmit(){

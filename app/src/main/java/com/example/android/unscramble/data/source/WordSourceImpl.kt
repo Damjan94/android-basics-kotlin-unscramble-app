@@ -1,15 +1,16 @@
 package com.example.android.unscramble.data.source
 
 import android.content.res.XmlResourceParser
+import android.util.Log
 import com.example.android.unscramble.data.model.Word
-import com.example.android.unscramble.domain.use_case.xml_parser.ParseWordXmlUseCase
+import com.example.android.unscramble.domain.use_case.xml_parser.ParseXmlUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.random.Random
 
 class WordSourceImpl(
-    private val parseWordXml: ParseWordXmlUseCase,
+    private val parseWordXml: ParseXmlUseCase,
     private val random: Random
 ): WordSource {
     private var wordSet = ConcurrentSkipListSet<Word>()//mutableSetOf<Word>()
@@ -23,13 +24,14 @@ class WordSourceImpl(
         if(wordSet.isNotEmpty()) {
             return
         }
-        parseWordXml(document).collect() {
+        parseWordXml(document).collect {
             wordSet.addAll(it)
-            channel.send(wordSet.random(random))
+            channel.send(it.random(random))
         }
         channel.close()
     }
     override suspend fun getRandomWord(): Word {
+        Log.d("hello", "word set size = ${wordSet.size}")
         return try {
             channel.receive()
         } catch (_: ClosedReceiveChannelException) {
