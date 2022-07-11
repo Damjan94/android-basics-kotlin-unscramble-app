@@ -1,3 +1,5 @@
+https://user-images.githubusercontent.com/20781278/178334534-23a96c53-8cd0-4cf2-81ee-0a50a2b3770f.mp4
+
 What changed
 ------------
 
@@ -23,7 +25,11 @@ Used in the [Android Basics with Kotlin](https://developer.android
 .com/courses/android-basics-kotlin/course) course.
 
 
-
+|
+|
+|
+|
+|
 
 Pre-requisites
 --------------
